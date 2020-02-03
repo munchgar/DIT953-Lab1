@@ -19,14 +19,14 @@ public class Car implements Movable {
     enum Direction{NORTH, EAST, SOUTH, WEST;}
 
     Direction dir = Direction.NORTH; //Current direction of car
-    double X = 0; //X-coordinate for car
-    double Y = 0; //Y-coordinates for car
+    private double X = 0; //X-coordinate for car
+    private double Y = 0; //Y-coordinates for car
 
-    final int nrDoors; // Number of doors on the car
-    double enginePower; // Engine power of the car
-    double currentSpeed; // The current speed of the car
-    Color color; // Color of the car
-    String modelName; // The car model name
+    private final int nrDoors; // Number of doors on the car
+    private double enginePower; // Engine power of the car
+    private double currentSpeed; // The current speed of the car
+    private Color color; // Color of the car
+    private String modelName; // The car model name
     
     /**
      * The constructor initiates all field to default values and sets
