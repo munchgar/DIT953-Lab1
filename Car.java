@@ -11,210 +11,179 @@ import java.awt.*;
  *
  */
 public class Car implements Movable {
-    
-    /**
-     * Cars class that specifies the functions of a car. We initiate any car to start in (0,0) with the direction NORTH.
-     */
-    enum Direction {NORTH, EAST, SOUTH, WEST;} // directional values to represent where a car is facing
-    
-    Direction dir = Direction.NORTH; // Current direction of car
-    double x = 0; // X-coordinate for car
-    double y = 0; // Y-coordinate for car
 
-    int nrDoors; // Number of doors on the car
+    /**
+     * the direction of the car as represented by the points of
+     * the compass (north, east, south and west).
+     */
+    enum Direction{NORTH, EAST, SOUTH, WEST;}
+
+    Direction dir = Direction.NORTH; //Current direction of car
+    double X = 0; //X-coordinate for car
+    double Y = 0; //Y-coordinates for car
+
+    final int nrDoors; // Number of doors on the car
     double enginePower; // Engine power of the car
     double currentSpeed; // The current speed of the car
     Color color; // Color of the car
     String modelName; // The car model name
-
-
-    /***
-     * getter for current speed
-     * @return gives back the speed of a car in the form of a double
+    
+    /**
+     * The constructor initiates all field to default values and sets
+     * direction to North and realtice position to coord: (0,0).
+     * 
+     * @param nrDoors - the number of doors of the car.
+     * @throws IllegalArgumentException if the number of doors is less
+     * then 1.
      */
-    public double getCurrentSpeed() {
-        return currentSpeed;
+    public Car(int nrDoors) {
+        if(nrDoors < 1) throw new IllegalArgumentException();
+        this.nrDoors = nrDoors;
     }
-
-    /***
-     * getter for colour
-     * @return gives back the color of a car
+    
+    /**
+     * @return - the number of doors.
      */
-    public Color getColor() {
-        return color;
-    }
-
-    /***
-     * setter for color of a car
-     * @param clr takes in a color as an argument and sets it for the car.
-     */
-
-    public void setColor(Color clr) {
-        color = clr;
-    }
-
-    /***
-     * starting speed when engine is turned on.
-     */
-
-    public void startEngine() {
-        currentSpeed = 0.1;
-    }
-
-    /***
-     * getter for number of doors on car
-     * @return gives the number of doors
-     */
-
-    public int getNrDoors() {
+    public int getNrDoors(){
         return nrDoors;
     }
 
-    /***
-     * getter for engine power of car
-     * @return gives the engine power
+    /**
+     * @return - the current engine power
      */
-
-    public double getEnginePower() {
+    public double getEnginePower(){
         return enginePower;
     }
 
-    /***
-     *  Sets speed of car to 0
+    /**
+     * @return - the current speed.
      */
-
-    public void stopEngine() {
-        currentSpeed = 0;
+    public double getCurrentSpeed(){
+        return currentSpeed;
     }
 
-    /***
-     * Implementation of the car moving with a direction and speed with a switch statement.
+    /**
+     * @return - the color.
      */
-
-    public void move() {
-        switch (dir) {
-            case NORTH:
-                y += getCurrentSpeed();
-                break;
-            case EAST:
-                x += getCurrentSpeed();
-                break;
-            case SOUTH:
-                y -= getCurrentSpeed();
-                break;
-            case WEST:
-                x -= getCurrentSpeed();
-                break;
-        }
+    public Color getColor(){
+        return color;
     }
 
-    /***
-     * Similar implementation but for turning current direction left.
+    /**
+     * @param clr - the color to be set.
      */
-
-    public void turnLeft() {
-        switch (dir) {
-            case NORTH:
-                dir = Direction.WEST;
-                break;
-            case EAST:
-                dir = Direction.NORTH;
-                break;
-            case SOUTH:
-                dir = Direction.EAST;
-                break;
-            case WEST:
-                dir = Direction.SOUTH;
-                break;
-        }
-
+    public void setColor(Color clr){
+	    color = clr;
     }
 
-    /***
-     * Similar implementation but for turning cars direction one step right.
+    /**
+     * sets current speed to 0.1.
      */
-    public void turnRight() {
-        switch (dir) {
-            case NORTH:
-                dir = Direction.EAST;
-                break;
-            case EAST:
-                dir = Direction.SOUTH;
-                break;
-            case SOUTH:
-                dir = Direction.WEST;
-                break;
-            case WEST:
-                dir = Direction.NORTH;
-                break;
-        }
-
+    public void startEngine(){
+	    currentSpeed = 0.1;
     }
 
-    /***
-     * Improved incrementspeed that adds speed based on amount
-     * @param amount <-- relies on this argument
+    /**
+     * sets current speed to 0.
      */
-    private void incrementSpeed(double amount) {
+    public void stopEngine(){
+	    currentSpeed = 0;
+    }
+
+    /**
+     * @param amount - the amount of increase to the speed of the car.
+     */
+    private void incrementSpeed(double amount){
         double temp = currentSpeed + amount;
-        if (temp > enginePower )
+        if(temp > enginePower) {
             currentSpeed = enginePower;
-
-        else if (temp < 0)
+        } else if (temp < 0) {
             currentSpeed = 0;
-        else {
+        } else {
             currentSpeed = temp;
         }
-
     }
 
-    /***
-     * Decreases speed by x amount
-     * @param amount <-- relies on this argument.
+    /**
+     * @param amount - the amount of decrease to the speed of the car.
      */
-
-    private void decrementSpeed(double amount) {
+    private void decrementSpeed(double amount){
         double temp = currentSpeed - amount;
-        if (temp > enginePower )
+        if(temp > enginePower) {
             currentSpeed = enginePower;
-
-        else if (temp < 0)
+        } else if (temp < 0) {
             currentSpeed = 0;
-        else {
+        } else {
             currentSpeed = temp;
         }
     }
-
-    /***
-     * Specifies that incrementSpeed (amount) only can be a double in the range of 0 to 1.
-     * @param amount <-- takes this as argument.
+    
+    /**
+     * @param amount - the amount of increase to the speed of the car.
+     * @throws  IllegalArgumentException if amount is lesser then 0 or 
+     *          greater then 1.
      */
-        public void gas ( double amount){
-            incrementSpeed(amount);
-            if (amount < 0 || amount > 1) {
-                throw new IllegalArgumentException();
-            }
-        }
+    // TODO fix this method according to lab pm
+    public void gas(double amount){
+        if(amount < 0 || amount > 1) throw new IllegalArgumentException();
 
-    /***
-     * Same but for decrementspeed.
-     * @param amount <-- takes this as argument
-     */
-    public void brake ( double amount){
-            decrementSpeed(amount);
-            if (amount < 0 || amount > 1) {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        // -- PRINT METHODS -- //
-
-    /***
-     * Testfunction we used, to print coordinates in the x and y plane.
-     */
-        void printCoords() {
-            System.out.println("(" + x + "," + y + ")");
-        }
-
+        incrementSpeed(amount);
     }
 
+    /**
+     * @param amount - the amount of derease to the speed of the car.
+     * @throws  IllegalArgumentException if amount is lesser then 0 or 
+     *          greater then 1.
+     */
+    // TODO fix this method according to lab pm
+    public void brake(double amount){
+        if(amount < 0 || amount > 1) throw new IllegalArgumentException();
+
+        decrementSpeed(amount);
+    }
+
+    //---------- Movable implementation ----------//
+
+    /**
+     * Changes the car's position in accordence with its current direction
+     * and speed.
+     */
+    public void move(){
+        switch(dir) {
+            case NORTH: Y += getCurrentSpeed(); break;
+            case EAST: X += getCurrentSpeed(); break;
+            case SOUTH: Y -= getCurrentSpeed(); break;
+            case WEST: X -= getCurrentSpeed(); break;
+        }
+    }
+    /**
+     * Shifts the direction of the car 90 degrees to the left (counter clockwise).
+     */
+    public void turnLeft(){
+        switch(dir) {
+            case NORTH: dir = Direction.WEST; break;
+            case EAST: dir = Direction.NORTH; break;
+            case SOUTH: dir = Direction.EAST; break;
+            case WEST: dir = Direction.SOUTH; break;
+        }
+    }
+    /**
+     * Shifts the direction of the car 90 degrees to the right (clockwise).
+     */
+    public void turnRight(){
+        switch(dir) {
+            case NORTH: dir = Direction.EAST; break;
+            case EAST: dir = Direction.SOUTH; break;
+            case SOUTH: dir = Direction.WEST; break;
+            case WEST: dir = Direction.NORTH; break;
+        }
+    }
+
+    //---------- Print methods ----------//
+    /**
+     * A simple print method.
+     */
+    public void printCoords() {
+        System.out.println("(" + X + "," + Y +")"); // (X,Y)
+    }
+}
