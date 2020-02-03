@@ -1,114 +1,220 @@
 import java.awt.*;
 
-public class Car implements Movable{
+public class Car implements Movable {
+    /***
+     * @author Jonathan Héden,
+     * @author Nicklas Strandevall,
+     * @author Kevin Rylander
+     *
+     */
 
-    enum Direction{NORTH, EAST, SOUTH, WEST;}
 
-    Direction dir = Direction.NORTH; //Current direction of car
-    double X = 0; //X-coordinate for car
-    double Y = 0; //Y-coordinates for car
+    /***
+     * Cars class that specifies the functions of a car.
+     */
+
+
+    double x = 0; // X-coordinate for car
+    double y = 0; // Y-coordinate for car
+    Direction dir = Direction.NORTH; // Current direction of car
 
     int nrDoors; // Number of doors on the car
+
+    enum Direction {NORTH, EAST, SOUTH, WEST;} // directional values to represent where a car is facing
+
     double enginePower; // Engine power of the car
     double currentSpeed; // The current speed of the car
     Color color; // Color of the car
-    String modelName; // The car model name    
-    
-    public int getNrDoors(){
-        return nrDoors;
-    }
-    public double getEnginePower(){
-        return enginePower;
-    }
+    String modelName; // The car model name
 
-    public double getCurrentSpeed(){
+
+    /***
+     * getter for current speed
+     * @return gives back the speed of a car in the form of a double
+     */
+    public double getCurrentSpeed() {
         return currentSpeed;
     }
 
-    public Color getColor(){
+    /***
+     * getter for colour
+     * @return gives back the color of a car
+     */
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(Color clr){
-	    color = clr;
+    /***
+     * setter for color of a car
+     * @param clr takes in a color as an argument and sets it for the car.
+     */
+
+    public void setColor(Color clr) {
+        color = clr;
     }
 
-    public void startEngine(){
-	    currentSpeed = 0.1;
+    /***
+     * starting speed when engine is turned on.
+     */
+
+    public void startEngine() {
+        currentSpeed = 0.1;
     }
 
-    public void stopEngine(){
-	    currentSpeed = 0;
+    /***
+     * getter for number of doors on car
+     * @return gives the number of doors
+     */
+
+    public int getNrDoors() {
+        return nrDoors;
     }
 
-    private void incrementSpeed(double amount){
+    /***
+     * getter for engine power of car
+     * @return gives the engine power
+     */
+
+    public double getEnginePower() {
+        return enginePower;
+    }
+
+    /***
+     *  Sets speed of car to 0
+     */
+
+    public void stopEngine() {
+        currentSpeed = 0;
+    }
+
+    /***
+     * Implementation of the car moving with a direction and speed with a switch statement.
+     */
+
+    public void move() {
+        switch (dir) {
+            case NORTH:
+                y += getCurrentSpeed();
+                break;
+            case EAST:
+                x += getCurrentSpeed();
+                break;
+            case SOUTH:
+                y -= getCurrentSpeed();
+                break;
+            case WEST:
+                x -= getCurrentSpeed();
+                break;
+        }
+    }
+
+    /***
+     * Similar implementation but for turning current direction left.
+     */
+
+    public void turnLeft() {
+        switch (dir) {
+            case NORTH:
+                dir = Direction.WEST;
+                break;
+            case EAST:
+                dir = Direction.NORTH;
+                break;
+            case SOUTH:
+                dir = Direction.EAST;
+                break;
+            case WEST:
+                dir = Direction.SOUTH;
+                break;
+        }
+
+    }
+
+    /***
+     * Similar implementation but for turning cars direction one step right.
+     */
+    public void turnRight() {
+        switch (dir) {
+            case NORTH:
+                dir = Direction.EAST;
+                break;
+            case EAST:
+                dir = Direction.SOUTH;
+                break;
+            case SOUTH:
+                dir = Direction.WEST;
+                break;
+            case WEST:
+                dir = Direction.NORTH;
+                break;
+        }
+
+    }
+
+    /***
+     * Improved incrementspeed that adds speed based on amount
+     * @param amount <-- relies on this argument
+     */
+    private void incrementSpeed(double amount) {
         double temp = currentSpeed + amount;
-        if(temp > enginePower) {
+        if (temp > enginePower )
             currentSpeed = enginePower;
-        } else if (temp < 0) {
+
+        else if (temp < 0)
             currentSpeed = 0;
-        } else {
+        else {
             currentSpeed = temp;
         }
+
     }
 
-    private void decrementSpeed(double amount){
+    /***
+     * Decreases speed by x amount
+     * @param amount <-- relies on this argument.
+     */
+
+    private void decrementSpeed(double amount) {
         double temp = currentSpeed - amount;
-        if(temp > enginePower) {
+        if (temp > enginePower )
             currentSpeed = enginePower;
-        } else if (temp < 0) {
+
+        else if (temp < 0)
             currentSpeed = 0;
-        } else {
+        else {
             currentSpeed = temp;
         }
     }
-    
-    // TODO fix this method according to lab pm
-    public void gas(double amount){
-        if(amount < 0 || amount > 1) throw new IllegalArgumentException();
 
-        incrementSpeed(amount);
-    }
-
-    // TODO fix this method according to lab pm
-    public void brake(double amount){
-        if(amount < 0 || amount > 1) throw new IllegalArgumentException();
-
-        decrementSpeed(amount);
-    }
-
-    //---------- Movable implementation ----------//
-
-    public void move(){
-        switch(dir) {
-            case NORTH: Y += getCurrentSpeed(); break;
-            case EAST: X += getCurrentSpeed(); break;
-            case SOUTH: Y -= getCurrentSpeed(); break;
-            case WEST: X -= getCurrentSpeed(); break;
+    /***
+     * Specifies that incrementSpeed (amount) only can be a double in the range of 0 to 1.
+     * @param amount <-- takes this as argument.
+     */
+        public void gas ( double amount){
+            incrementSpeed(amount);
+            if (amount < 0 || amount > 1) {
+                throw new IllegalArgumentException();
+            }
         }
-    }
 
-    public void turnLeft(){
-        switch(dir) {
-            case NORTH: dir = Direction.WEST; break;
-            case EAST: dir = Direction.NORTH; break;
-            case SOUTH: dir = Direction.EAST; break;
-            case WEST: dir = Direction.SOUTH; break;
+    /***
+     * Same but for decrementspeed.
+     * @param amount <-- takes this as argument
+     */
+    public void brake ( double amount){
+            decrementSpeed(amount);
+            if (amount < 0 || amount > 1) {
+                throw new IllegalArgumentException();
+            }
         }
-    }
-    
-    public void turnRight(){
-        switch(dir) {
-            case NORTH: dir = Direction.EAST; break;
-            case EAST: dir = Direction.SOUTH; break;
-            case SOUTH: dir = Direction.WEST; break;
-            case WEST: dir = Direction.NORTH; break;
+
+        // -- PRINT METHODS -- //
+
+    /***
+     * Testfunction we used, to print coordinates in the x and y plane.
+     */
+        void printCoords() {
+            System.out.println("(" + x + "," + y + ")");
         }
+
     }
 
-    //---------- Print methods ----------//
-
-    public void printCoords() {
-        System.out.println("(" + X + "," + Y +")"); // (X,Y)
-    }
-}
