@@ -1,27 +1,27 @@
 import java.awt.*;
 
+/**
+ * The Car class is a simple class that implements a basic representation
+ * of a car which include some typical car specs as well as position and
+ * direction.
+ * 
+ * @author Jonathan Héden
+ * @author Nicklas Strandevall
+ * @author Kevin Rylander
+ *
+ */
 public class Car implements Movable {
-    /***
-     * @author Jonathan Héden,
-     * @author Nicklas Strandevall,
-     * @author Kevin Rylander
-     *
-     */
-
-
-    /***
+    
+    /**
      * Cars class that specifies the functions of a car. We initiate any car to start in (0,0) with the direction NORTH.
      */
-
-
+    enum Direction {NORTH, EAST, SOUTH, WEST;} // directional values to represent where a car is facing
+    
+    Direction dir = Direction.NORTH; // Current direction of car
     double x = 0; // X-coordinate for car
     double y = 0; // Y-coordinate for car
-    Direction dir = Direction.NORTH; // Current direction of car
 
     int nrDoors; // Number of doors on the car
-
-    enum Direction {NORTH, EAST, SOUTH, WEST;} // directional values to represent where a car is facing
-
     double enginePower; // Engine power of the car
     double currentSpeed; // The current speed of the car
     Color color; // Color of the car
