@@ -10,7 +10,7 @@ public class Car implements Movable {
 
 
     /***
-     * Cars class that specifies the functions of a car.
+     * Cars class that specifies the functions of a car. We initiate any car to start in (0,0) with the direction NORTH.
      */
 
 
