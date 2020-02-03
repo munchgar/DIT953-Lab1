@@ -47,7 +47,7 @@ public class Saab95 extends Car{
     }
 
     /**
-     * Gets overridden by method in superclass cars
+     * Gets overridden by method in superclass cars, Improved incrementspeed that adds speed based on amount
      * @param amount
      */
     private void incrementSpeed(double amount){
