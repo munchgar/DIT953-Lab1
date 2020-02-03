@@ -1,8 +1,23 @@
 public interface Movable {
-    
-    public void move();
+    /***
+     * Interface that states that something has to contain these methods.
+     */
 
-    public void turnLeft();
+    /***
+     * Move function that is later defined in Cars
+     */
+    void move();
 
-    public void turnRight();
+    /***
+     * Changes direction to the left
+     */
+
+    void turnLeft();
+
+    /***
+     * Changes direction to the right
+     */
+
+    void turnRight();
+
 }
