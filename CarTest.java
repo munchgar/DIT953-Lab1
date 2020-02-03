@@ -5,9 +5,9 @@ import java.awt.*;
 
 import static org.junit.Assert.*;
 
-public class CarsTest {
-    Cars saab = new Saab95();
-    Cars volvo = new Volvo240();
+public class CarTest {
+    Car saab = new Saab95();
+    Car volvo = new Volvo240();
 
     @Test
     public void getCurrentSpeed() {
@@ -60,13 +60,13 @@ public class CarsTest {
     @Test
     public void turnLeft() {
         volvo.turnLeft();
-        assertTrue(volvo.getDir() == Cars.Direction.WEST);
+        assertTrue(volvo.getDir() == Car.Direction.WEST);
     }
 
     @Test
     public void turnRight() {
         volvo.turnRight();
-        assertTrue(volvo.getDir() == Cars.Direction.EAST);
+        assertTrue(volvo.getDir() == Car.Direction.EAST);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class CarsTest {
 
     @Test
     public void getDir()  {
-        assertTrue(volvo.getDir() == Cars.Direction.NORTH);
+        assertTrue(volvo.getDir() == Car.Direction.NORTH);
     }
 
 }
