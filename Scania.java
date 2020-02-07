@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Scania extends Cars {
+public class Scania extends Car {
 
     int degree;
 
@@ -18,11 +18,10 @@ public class Scania extends Cars {
 
     /***
      * Tips the flatbed of a scania, only if the speed is 0.
-     * @param scania
      * @param deg
      */
-    public void tip(Scania scania, int deg) {
-        if (scania.getCurrentSpeed() != 0 ) {
+    public void tip(int deg) {
+        if (getCurrentSpeed() != 0 ) {
             throw new IllegalArgumentException();
         }
         else if (degree + deg > 70 || degree + deg < 0) {
@@ -31,13 +30,13 @@ public class Scania extends Cars {
         else degree = degree + deg;
     }
 
+
     /***
      * Sinks the flatbed of a scania, only if the speed is 0.
-     * @param scania
      * @param deg
      */
-    public void sink(Scania scania, int deg) {
-        if (scania.getCurrentSpeed() != 0 ) {
+    public void sink(int deg) {
+        if (getCurrentSpeed() != 0 ) {
             throw new IllegalArgumentException();
         }
         else if (degree - deg > 70 || degree - deg < 0) {
