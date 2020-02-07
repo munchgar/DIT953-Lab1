@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 import java.awt.*;
 
-class ScaniaTest extends Cars {
+class ScaniaTest extends Car {
 
     Scania scania = new Scania();
 
