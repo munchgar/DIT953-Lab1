@@ -4,6 +4,9 @@ public class Scania extends Car {
 
     int degree;
 
+    final int MAX_TILT = 70;
+    final int MIN_TILT = 0;
+
     /***
      * Constructor for a scania truck.
      */
@@ -21,13 +24,14 @@ public class Scania extends Car {
      * @param deg
      */
     public void tip(int deg) {
-        if (getCurrentSpeed() != 0 ) {
-            throw new IllegalArgumentException();
+        if (getCurrentSpeed() != 0 ) throw new IllegalStateException();
+        if(deg < 0) throw new IllegalArgumentException();
+
+        if (degree + deg > MAX_TILT) {
+            degree = MAX_TILT;
+        } else {
+            degree += deg;
         }
-        else if (degree + deg > 70 || degree + deg < 0) {
-            throw new IllegalArgumentException();
-        }
-        else degree = degree + deg;
     }
 
 
@@ -36,13 +40,14 @@ public class Scania extends Car {
      * @param deg
      */
     public void sink(int deg) {
-        if (getCurrentSpeed() != 0 ) {
-            throw new IllegalArgumentException();
+        if (getCurrentSpeed() != 0 ) throw new IllegalStateException();
+        if(deg < 0) throw new IllegalArgumentException();
+
+        if (degree - deg < MIN_TILT) {
+            degree = MIN_TILT;
+        } else {
+            degree -= deg;
         }
-        else if (degree - deg > 70 || degree - deg < 0) {
-            throw new IllegalArgumentException();
-        }
-        else degree = degree - deg;
     }
 
     /***
@@ -51,17 +56,12 @@ public class Scania extends Car {
      * @param amount <-- takes this as argument. (value between 0 and 1 or error).
      */
     @Override
-    public void gas ( double amount ){
-        if (degree > 0)
-            throw new IllegalArgumentException();
+    public void gas (double amount){
+        if (degree > 0) throw new IllegalStateException();
+        if (amount < 0 || amount > 1) throw new IllegalArgumentException();
 
-        if (amount < 0 || amount > 1) {
-            throw new IllegalArgumentException();
-        }
         incrementSpeed(amount);
     }
-
-
 }
 
 
