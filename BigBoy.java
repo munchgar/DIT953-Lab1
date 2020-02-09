@@ -42,6 +42,7 @@ public class BigBoy extends Car {
         if (rmp != RampMode.DOWN) throw new IllegalStateException("The ramp must be down to load a car");
         if(getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
         if(loadSize + car.size > 10) throw new IllegalStateException("There is not enough room on the BigBoy to load the car");
+        
         load.add(car);
         loadSize += car.size;
         changeXy(car);
@@ -65,6 +66,7 @@ public class BigBoy extends Car {
     public void unload() {
         if (getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
         if (rmp!= RampMode.DOWN) throw new IllegalStateException("Unable to unload cars as the ramp is not down");
+        
         int indexCar = load.size() - 1;
         Car car = load.remove(indexCar);
         load.remove(indexCar);
@@ -80,7 +82,6 @@ public class BigBoy extends Car {
      */
     
     public void move() {
-
         switch (dir) {
             case NORTH:
                 y += getCurrentSpeed();
@@ -95,14 +96,11 @@ public class BigBoy extends Car {
                 x -= getCurrentSpeed();
                 break;
         }
-        for (int index = 0; index < load.size() -1; index++) {
+        for (int index = 0; index < load.size(); index++) {
             Car car = load.get(index);
             car.x = this.x;
             car.y = this.y;
         }
     }
-
-
-
 }
 
