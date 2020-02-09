@@ -64,16 +64,17 @@ public class BigBoy extends Car {
      */
     
     public void unload() {
+        if (loadSize == 0) throw new IllegalStateException("There's nothing to unload");
         if (getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
         if (rmp!= RampMode.DOWN) throw new IllegalStateException("Unable to unload cars as the ramp is not down");
-        
+
         int indexCar = load.size() - 1;
         Car car = load.remove(indexCar);
         load.remove(indexCar);
+        loadSize =- car.size;
         car.x = car.x + 2;
         car.y = car.y + 2;
     }
-    
     @Override
     
     /***
