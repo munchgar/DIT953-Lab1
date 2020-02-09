@@ -83,7 +83,7 @@ public class BigBoy extends Cars {
                 x -= getCurrentSpeed();
                 break;
         }
-        for (int index = 0; index < load.size()+1; index++) {
+        for (int index = 0; index < load.size() -1; index++) {
             Cars car = load.get(index);
             car.x = this.x;
             car.y = this.y;
