@@ -18,7 +18,6 @@ public class BigBoy extends Car {
      */
     ArrayList<Car> load = new ArrayList<Car>();
     int loadSize;
-    BigBoy bigboy = new BigBoy();
     /***
      * Constructor for BigBoy (a truck).
      */
@@ -36,6 +35,7 @@ public class BigBoy extends Car {
      * Method that loads a truck with cars, with a various amount of conditions that need to be met.
      * @param car <-- takes any car that is not a BigBoy as parameter.
      */
+    
     public void load(Car car) {
         if (!checkDistance(car, this)) throw new IllegalStateException("The vehicles are too far apart or too close");
         if(car instanceof BigBoy) throw new IllegalStateException("You can't load a BigBoy on another BigBoy");
@@ -46,11 +46,12 @@ public class BigBoy extends Car {
         loadSize += car.size;
         changeXy(car);
         }
-
+    
     /***
      * Small helper function for changing the x and y value of a car to the x and y of a truck.
      * @param car <-- takes any car as a parameter.
      */
+    
     public void changeXy(Car car) {
             car.x = this.x;
             car.y = this.y;
@@ -60,6 +61,7 @@ public class BigBoy extends Car {
      * Unloads the car that was last loaded onto the truck
      * Also changes the x and y value of a car so that the car is not too close to the truck.
      */
+    
     public void unload() {
         if (getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
         if (rmp!= RampMode.DOWN) throw new IllegalStateException("Unable to unload cars as the ramp is not down");
@@ -69,11 +71,14 @@ public class BigBoy extends Car {
         car.x = car.x + 2;
         car.y = car.y + 2;
     }
+    
     @Override
+    
     /***
      * Overriden move function that works the same way but also loops through the list of cars (load)
      * and changes the specific cars X and Y to the X and Y of the truck.
      */
+    
     public void move() {
 
         switch (dir) {
