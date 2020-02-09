@@ -44,15 +44,13 @@ public class BigBoy extends Cars {
         if(loadSize + car.size > 10) throw new IllegalStateException("There is not enough room on the BigBoy to load the car");
         load.add(car);
         loadSize += car.size;
-        changeXy(bigboy, car);
+        changeXy(car);
         }
 
 
-    public void changeXy(BigBoy bigboy, Cars car) {
-        for (int i = 0; i < load.size()+1; i++){
-            car.x = bigboy.x;
-            car.y = bigboy.y;
-        }
+    public void changeXy(Cars car) {
+            car.x = this.x;
+            car.y = this.y;
     }
 
     /***
@@ -87,7 +85,8 @@ public class BigBoy extends Cars {
         }
         for (int index = 0; index < load.size()+1; index++) {
             Cars car = load.get(index);
-            car.x = bigboy.x;
+            car.x = this.x;
+            car.y = this.y;
         }
     }
 
