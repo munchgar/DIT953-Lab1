@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Cars implements Movable {
+public class Car implements Movable {
     /***
      * @author Jonathan Héden,
      * @author Nicklas Strandevall,
@@ -14,8 +14,8 @@ public class Cars implements Movable {
      */
 
     int size;
-    private double x = 0; // X-coordinate for car
-    private double y = 0; // Y-coordinate for car
+    double x = 0; // X-coordinate for car
+    double y = 0; // Y-coordinate for car
     Direction dir = Direction.NORTH; // Current direction of car
 
     int nrDoors; // Number of doors on the car
@@ -221,7 +221,10 @@ public class Cars implements Movable {
         if (car1.x == car2.x && car1.y == car2.y) {
             return false;
         }
-        
+        if (Math.abs(car1.x - car2.x) > 3 || Math.abs(car1.y - car2.y) > 3) {
+            return false;
+        }
+        else return true;
     }
 
         // -- PRINT METHODS -- //
