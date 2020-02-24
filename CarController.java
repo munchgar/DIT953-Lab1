@@ -48,6 +48,13 @@ public class CarController {
                 car.move();
                 int x = (int) Math.round(car.getX());
                 int y = (int) Math.round(car.getY());
+
+                if(y < 0 || y > 500) {
+                    car.turnAround();
+                } else if(x < 0 || x > 700) {
+                    car.turnAround();
+                }
+
                 frame.drawPanel.moveit(x, y);
                 // repaint() calls the paintComponent method of the panel
                 frame.drawPanel.repaint();
@@ -65,9 +72,9 @@ public class CarController {
 
     // Calls the brake method for each car once
     void brake(int amount) {
-        double gas = ((double) amount) / 100;
+        double brake = ((double) amount) / 100;
         for (Car car : cars) {
-            car.brake(gas);
+            car.brake(brake);
         }
     }
 
@@ -75,8 +82,7 @@ public class CarController {
     void setTurboOn() {
         for (Car car : cars) {
             if(car instanceof Saab95) {
-                Saab95 saab = (Saab95) car;
-                saab.setTurboOn();
+                ((Saab95) car).setTurboOn();
             }
         }
     }
@@ -85,8 +91,7 @@ public class CarController {
     void setTurboOff() {
         for (Car car : cars) {
             if(car instanceof Saab95) {
-                Saab95 saab = (Saab95) car;
-                saab.setTurboOff();
+                ((Saab95) car).setTurboOff();
             }
         }
     }
@@ -96,7 +101,7 @@ public class CarController {
         for (Car car : cars) {
             if(car instanceof Scania) {
                 Scania scania = (Scania) car;
-                scania.tip(scania.MIN_TILT);
+                scania.tip(scania.MAX_TILT);
             }
         }
     }
@@ -106,7 +111,7 @@ public class CarController {
         for (Car car : cars) {
             if(car instanceof Scania) {
                 Scania scania = (Scania) car;
-                scania.sink(scania.MAX_TILT);
+                scania.sink(scania.MIN_TILT);
             }
         }
     }
