@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -9,30 +8,31 @@ import java.util.ArrayList;
  * @author Nicklas Strandevall,
  * @author Kevin Rylander
  */
-public class BigBoy extends Car {
+public class BigBoy extends Car implements Loadable<Car> {
 
     /**
      * enumeration for the states of the ramp, namely UP and DOWN.
      */
     enum RampMode {UP, DOWN}
-    RampMode rmp;
+    private RampMode rmp;
 
     /**
      * container for the cars
      */
-    ArrayList<Car> load = new ArrayList<Car>();
-    int loadSize;
+    private ArrayList<Car> load = new ArrayList<Car>();
+    private int loadCapacity;
 
     /**
      * Constructor for BigBoy.
      */
     public BigBoy() {
+        super(  2, //nrDoors
+                "BigBoy" //modelName
+        );
         rmp = RampMode.UP;
-        nrDoors = 2;
-        color = Color.black;
-        enginePower = 35;
-        modelName = "BigBoy";
-        loadSize = 0;
+        loadCapacity = 10;
+        setColor(Color.ORANGE);
+        setEnginePower(550);
         stopEngine();
     }
 
@@ -42,15 +42,14 @@ public class BigBoy extends Car {
      */
     
     public void load(Car car) {
-        if (!checkDistance(car, this)) throw new IllegalStateException("The vehicles are too far apart or too close");
+        if (!checkDistance(car)) throw new IllegalStateException("The vehicles are too far apart or too close");
         if(car instanceof BigBoy) throw new IllegalStateException("You can't load a BigBoy on another BigBoy");
         if (rmp != RampMode.DOWN) throw new IllegalStateException("The ramp must be down to load a car");
         if(getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
-        if(loadSize + car.size > 10) throw new IllegalStateException("There is not enough room on the BigBoy to load the car");
+        if(load.size() >= loadCapacity) throw new IllegalArgumentException("The BigBoy is full");
         
         load.add(car);
-        loadSize += car.size;
-        changeXy(car);
+        adjustPos(car);
         }
 
     /**
@@ -58,40 +57,39 @@ public class BigBoy extends Car {
      * 
      * @param car - takes any car as a parameter.
      */
-    public void changeXy(Car car) {
-            car.x = this.x;
-            car.y = this.y;
+    public void adjustPos(Car car) {
+            car.setX(getX());
+            car.setY(getY());
     }
-
-
 
     /**
      * Unloads the car that was last loaded onto the truck and puts it 2 units behind the
      * truck (in whatever direction it is going).
      */
-    public void unload() {
-        if (loadSize == 0) throw new IllegalStateException("There's nothing to unload");
+    public Car unload() {
+        if (load.size() == 0) throw new IllegalStateException("There's nothing to unload");
         if (getCurrentSpeed() != 0) throw new IllegalStateException("The BigBoy is moving");
-        if (rmp!= RampMode.DOWN) throw new IllegalStateException("Unable to unload cars as the ramp is not down");
+        if (rmp != RampMode.DOWN) throw new IllegalStateException("Unable to unload cars as the ramp is not down");
 
         int indexCar = load.size() - 1;
         Car car = load.remove(indexCar);
-        loadSize =- car.size;
+        Direction dir = car.getDir();
 
-        switch(this.dir) {
+        switch(dir) {
             case NORTH:
-                car.y -= 2;
+                car.setY(car.getY() - 2);
                 break;
             case EAST:
-                car.x -= 2;
+                car.setX(car.getX() - 2);
                 break;
             case SOUTH:
-                car.y += 2;
+                car.setY(car.getY() + 2);
                 break;
             case WEST:
-                car.x += 2;
+                car.setX(car.getX() + 2);
                 break;
         }
+        return car;
     }
     
     /**
@@ -100,25 +98,33 @@ public class BigBoy extends Car {
      */
     @Override
     public void move() {
+        Direction dir = getDir();
         switch (dir) {
             case NORTH:
-                y += getCurrentSpeed();
+                setY(getY() + getCurrentSpeed());
                 break;
             case EAST:
-                x += getCurrentSpeed();
+                setX(getX() + getCurrentSpeed());
                 break;
             case SOUTH:
-                y -= getCurrentSpeed();
+                setY(getY() - getCurrentSpeed());
                 break;
             case WEST:
-                x -= getCurrentSpeed();
+                setX(getX() - getCurrentSpeed());
                 break;
         }
         for (int index = 0; index < load.size(); index++) {
             Car car = load.get(index);
-            car.x = this.x;
-            car.y = this.y;
+            adjustPos(car);
         }
+    }
+
+    protected void incrementSpeed(double amount){
+        setCurrentSpeed(getCurrentSpeed() + amount);
+    }
+
+    protected void decrementSpeed(double amount){
+        setCurrentSpeed(getCurrentSpeed() - amount);
     }
 }
 
