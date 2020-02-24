@@ -30,7 +30,11 @@ public class CarController {
         CarController cc = new CarController();
 
         cc.cars.add(new Volvo240());
-        //cc.cars.add(new Saab95());
+        cc.cars.add(new Saab95());
+        cc.cars.add(new Scania());
+
+        cc.cars.get(1).setX(100);
+        cc.cars.get(2).setX(200);
 
         // Start a new view and send a reference of self
         cc.frame = new CarView("CarSim 1.0", cc);
@@ -55,7 +59,7 @@ public class CarController {
                     car.turnAround();
                 }
 
-                frame.drawPanel.moveit(x, y);
+                frame.drawPanel.moveit(x, y, car);
                 // repaint() calls the paintComponent method of the panel
                 frame.drawPanel.repaint();
             }
@@ -100,8 +104,7 @@ public class CarController {
     void tip() {
         for (Car car : cars) {
             if(car instanceof Scania) {
-                Scania scania = (Scania) car;
-                scania.tip(scania.MAX_TILT);
+                ((Scania) car).tip(Scania.MAX_TILT);
             }
         }
     }
@@ -110,9 +113,20 @@ public class CarController {
     void sink() {
         for (Car car : cars) {
             if(car instanceof Scania) {
-                Scania scania = (Scania) car;
-                scania.sink(scania.MIN_TILT);
+                ((Scania) car).tip(Scania.MIN_TILT);
             }
+        }
+    }
+
+    void startAll() {
+        for (Car car : cars) {
+            car.startEngine();
+        }
+    }
+
+    void stopAll() {
+        for (Car car : cars) {
+            car.stopEngine();
         }
     }
 }
