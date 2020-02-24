@@ -55,8 +55,6 @@ public class CarView extends JFrame{
 
         this.add(drawPanel);
 
-
-
         SpinnerModel spinnerModel =
                 new SpinnerNumberModel(0, //initial value
                         0, //min
@@ -142,13 +140,7 @@ public class CarView extends JFrame{
                 carC.tip();
             }
         });
-
-        // turboOnButton.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         carC.gas(gasAmount);
-        //     }
-        // });
+        
 
         // Make the frame pack all it's components by respecting the sizes if possible.
         this.pack();
