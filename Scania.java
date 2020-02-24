@@ -18,12 +18,11 @@ public class Scania extends Car {
      * Constructor for a scania truck.
      */
     public Scania() {
-        degree = 0;
-        nrDoors = 2;
-        color = Color.black;
-        enginePower = 175;
-        modelName = "Scania";
-        stopEngine();
+        super(  2,  //nrDoors
+                "Scania" //modelName
+        );
+        setColor(Color.GRAY);
+        setEnginePower(325);
     }
 
     public int getDegree() {
@@ -39,11 +38,10 @@ public class Scania extends Car {
         if (getCurrentSpeed() != 0 ) throw new IllegalStateException();
         if(deg < 0) throw new IllegalArgumentException();
 
-        if (degree + deg > MAX_TILT) {
+        if (degree + deg > MAX_TILT)
             degree = MAX_TILT;
-        } else {
+        else
             degree += deg;
-        }
     }
 
     /**
@@ -55,11 +53,10 @@ public class Scania extends Car {
         if (getCurrentSpeed() != 0 ) throw new IllegalStateException();
         if(deg < 0) throw new IllegalArgumentException();
 
-        if (degree - deg < MIN_TILT) {
+        if (degree - deg < MIN_TILT)
             degree = MIN_TILT;
-        } else {
+        else
             degree -= deg;
-        }
     }
 
     /**
@@ -70,10 +67,18 @@ public class Scania extends Car {
      */
     @Override
     public void gas(double amount){
-        if (degree > 0) throw new IllegalStateException();
+        if (degree > 0) throw new IllegalStateException("The flatbed is still up");
         if (amount < 0 || amount > 1) throw new IllegalArgumentException();
 
         incrementSpeed(amount);
+    }
+
+    protected void incrementSpeed(double amount){
+        setCurrentSpeed(getCurrentSpeed() + amount);
+    }
+
+    protected void decrementSpeed(double amount){
+        setCurrentSpeed(getCurrentSpeed() - amount);
     }
 }
 
