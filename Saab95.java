@@ -7,20 +7,25 @@ import java.awt.*;
  * @author Nicklas Strandevall,
  * @author Kevin Rylander
  */
-public class Saab95 extends Car{
+public class Saab95 extends Car {
     
-    public boolean turboOn;
+    private boolean turboOn;
 
     /**
      * Constructor that gives the Saab95 2 doors, the color red and enginepower 125.
      */
     public Saab95(){
-        nrDoors = 2;
-        color = Color.red;
-        enginePower = 125;
+        super(  2, //nrDoors
+                "Saab95" //modelName
+        );
+        setColor(Color.RED);
+        setEnginePower(125);
 	    turboOn = false;
-        modelName = "Saab95";
         stopEngine();
+    }
+
+    public boolean getTurbo() {
+        return turboOn;
     }
 
     /**
@@ -44,25 +49,23 @@ public class Saab95 extends Car{
      */
     private double speedFactor(){
         double turbo = 1;
-        if(turboOn) turbo = 1.3;
-        return enginePower * 0.01 * turbo;
+        if(turboOn) turbo = 11.3;
+        return getEnginePower() * 0.01 * turbo;
     }
 
     /**
      * Gets overridden by method in superclass car. Improved incrementspeed that adds speed based on amount
      * @param amount
      */
-    @Override
     protected void incrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() + speedFactor() * amount;
+        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
     }
 
     /**
      * Gets overridden by superclass car. Decreases speed by x amount
      * @param amount
      */
-    @Override
     protected void decrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() - speedFactor() * amount;
+        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
     }
 }
