@@ -4,14 +4,17 @@ We are here tasked to analyze our different classes based on the SRC & SoC.
 
 // What responsibility areas do your classes have?
 
-We start by looking at our main class - the "Cars" class.
-The cars-class is somewhat of a heavy hitter, carrying quite a few responsibilities. The class implements our interface
+We start by looking at our main class - the "Car" class.
+The car-class is somewhat of a heavy hitter, carrying quite a few responsibilities. The class implements our interface
 "Movable" to determine all objects related to the class to be just that, moveable. Which makes sense.
 It starts off by initializing a few instance variables that are common for all of the different cars related to the class.
-For an example, nrDoors & modelName.
+For an example, nrDoors & modelName. We also abstracted our Car class to make it more flexible as it does carry such a heavy
+burden.
 
-We then initialize an enumeration for weather signs. These are meant to represent the directions of the specific cars.
-This also seems fair to declare in our cars class. Overall the Cars class contains the most vital information/methods
+We also have a class for position & one for direction that were initially a part of Car but are now their separate classes -
+this was because we realized that other objects may also hold a position or direction.
+
+Overall the Cars class contains the most vital information/methods
 that are universal for practically all sorts of cars. This class does a fair amount of work, in that sense.
 But we deem it to be reasonable as a method can be overriden if the specific car doesn't fully comply with the properties
 of for an example our "Gas" method.
@@ -23,12 +26,11 @@ Then we have the different specified car-classes. BigBoy, Saab95, Scania, & Volv
 and not particularly long classes - all thanks to our Cars class. They have some specifics to them,
 but they're still very much independent in the sense that if we were to edit one of the classes, it wouldn't break another one.
 They have their own niches like mentioned, the BigBoy for an example has a ramp - and it works differently from the ramp
-on the Scania.
+on the Scania. But even so, we decided to implement a new interface "Loadable" that is meant to make the loads more abstract
+to differentiate between the load on Mech & BigBoy.
 
-There's also the Mech class which sole aim is to contain, load & unload all cars. Here we also utiilized polymorphism to further our
-flexibility & abstraction. It could be argued that loading & unloading cars might be additional functions that
-make the class somewhat too broad in its function. But we deemed it fine for this occasion as it is still deeply connected
-and relatively simple implementations for our Mech.
+There's also the Mech class which sole aim is to contain, load & unload all cars. Here we also utilized polymorphism to further our
+flexibility & abstraction. Loading and unloading have their own implementations from Loadable, which was prior not the case.
 
 The car controller's responsibility is to listen to the "View" and responding in an appropriate manner by
 modifying the model state and then updating the view.
@@ -43,22 +45,26 @@ are to be bound to specific objects.
 Our cars classes are from our perspective relatively fair in terms of looking at SoC & SRP. They all have their own responsibilities,
 they're not very dependant on other classes with perhaps the exception of the Cars class. The cars class might have reason to change
 if we deemed another object/part to be a necessity of the general car. If a specific car class needs an additional part added to it -
-it is of relative ease to implement it however.
+it is of relative ease to implement it however. We did also make Car abstract like previously mentioned so no real 
+issues should occur here.
 
 If we instead look at something like the Mech class, there may be a point in time where it's also supposed to be able to take robots!
 Or maybe, it's also supposed to perform repairs on the things in the garage. But then we also exceed the limits of having a
 single responsibility so that part in particular should not be an issue, as it would most likely receive its own class.
-The point towards things that should be stored, loaded & unloaded that is not a car, does however remain.
 
 When we look at something like the DrawPanel, CarView & CarController class we can perceive several possible reasons for
 them to change. Like further abstraction of the class DrawPanel so that it does not only keep track of the position of
-a single car, but for all cars. -- Osäker på om detta behövs då det kanske blir åtgärdat i uppgift 1.
+a single car, but for all cars. For CarView & CarController
 
 // On what classes would you need to apply decomposition to better follow SoC & SRP?
 
-Classes like DrawPanel, Carview & Carcontroller all seem like they might be a bit too big. They all perform a various amount
-of differing tasks that could be instead broken down into 2 or 3 smaller classes. The classes we made ourselves are mainly
-fine - BUT if we do ever come across the need to implement things that are not quite "cars" but similiar, issues may start
+Classes like Carview & Carcontroller all seem like they are too dependant on each other.
+They all perform a various amount of differing tasks that could be instead broken down into 2 or 3 smaller classes. 
+The classes we made ourselves are mainly fine - 
+BUT if we do ever come across the need to implement things that are not quite "cars" but similiar, issues may start
 to quickly surmise. In other words, further abstraction of a few classes (like what we did with the Mech class) might be of
 enormous value for further implementation and change.
+
+CarView & CarController both have an instance of each other within themselves which is not to be recommended as they become
+mutually dependant on each other. DrawPanel is however okay on its own in theory.
 
