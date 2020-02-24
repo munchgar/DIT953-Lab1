@@ -7,43 +7,62 @@ import java.awt.*;
  * @author Nicklas Strandevall,
  * @author Kevin Rylander
  */
-public class Car implements Movable {
-    
-    enum Direction {NORTH, EAST, SOUTH, WEST;} // directional values to represent where a car is facing
+abstract public class Car implements Movable {
 
-    Direction dir = Direction.NORTH; // Current direction of car
-    double x = 0; // X-coordinate for car
-    double y = 0; // Y-coordinate for car
+    private Direction dir = Direction.NORTH; // Current direction of car
+    private Position pos = new Position(0, 0);
     
-    int nrDoors; // Number of doors on the car
-    double enginePower; // Engine power of the car
-    double currentSpeed; // Current speed of the car
-    int size; // Units of size for car
-    Color color; // Color of the car
-    String modelName; // Car model name
+    private final int nrDoors; // Number of doors on the car
+    private final String modelName; // Car model name
+    private Color color; // Color of the car
 
-    public Car() {
-        enginePower = 100;
+    private double enginePower; // Engine power of the car
+    private double currentSpeed; // Current speed of the car
+
+    public Car(int nrDoors, String modelName) {
+        this.nrDoors = nrDoors;
+        this.modelName = modelName;
+    }
+
+    /*---------- Position & Direction ----------*/
+
+    /**
+     * Getter for direction
+     * 
+     * @return - gives the direction
+     */
+    public Direction getDir() {
+        return dir;
     }
 
     public double getX() {
-        return x;
+        return pos.x;
+    }
+
+    protected void setX(double x) {
+        pos.x = x;
     }
 
     public double getY() {
-        return y;
+        return pos.y;
+    }
+
+    protected void setY(double y) {
+        pos.y = y;
     }
 
     /**
-     * getter for current speed
-     * @return gives back the speed of a car in the form of a double
+     * Getter for number of doors on car.
+     * 
+     * @return gives the number of doors
      */
-    public double getCurrentSpeed() {
-        return currentSpeed;
+    public int getNrDoors() {
+        return nrDoors;
     }
 
     /**
-     * getter for colour
+     * Getter for colour.
+     * 
      * @return gives back the color of a car
      */
     public Color getColor() {
@@ -51,11 +70,29 @@ public class Car implements Movable {
     }
 
     /**
-     * setter for color of a car
+     * Setter for color of a car.
+     * 
      * @param clr - takes in a color as an argument and sets it for the car.
      */
     public void setColor(Color clr) {
         color = clr;
+    }
+
+    public String getModel() {
+        return modelName;
+    }
+
+    /**
+     * Getter for engine power of car.
+     * 
+     * @return gives the engine power
+     */
+    public double getEnginePower() {
+        return enginePower;
+    }
+
+    protected void setEnginePower(int enginePower) {
+        this.enginePower = enginePower;
     }
 
     /**
@@ -66,36 +103,64 @@ public class Car implements Movable {
     }
 
     /**
-     * getter for number of doors on car
-     * @return gives the number of doors
-     */
-
-    public int getNrDoors() {
-        return nrDoors;
-    }
-
-    /**
-     * getter for engine power of car
-     * @return gives the engine power
-     */
-    public double getEnginePower() {
-        return enginePower;
-    }
-
-    /**
-     * Getter for direction
-     * @return - gives the direction
-     */
-    public Direction getDir() {
-        return dir;
-    }
-
-    /**
-     *  Sets speed of car to 0
+     * Sets speed of car to 0.
      */
 
     public void stopEngine() {
         currentSpeed = 0;
+    }
+
+    /**
+     * Getter for current speed.
+     * 
+     * @return gives back the speed of a car in the form of a double
+     */
+    public double getCurrentSpeed() {
+        return currentSpeed;
+    }
+
+    protected void setCurrentSpeed(double speed) {
+        currentSpeed = speed;
+    }
+
+    /**
+     * Improved incrementspeed that adds speed based on amount.
+     * 
+     * @param amount - relies on this argument
+     */
+    abstract protected void incrementSpeed(double amount);
+
+    /**
+     * Decreases speed of the car.
+     * 
+     * @param amount - The amount being decreased.
+     */
+    abstract protected void decrementSpeed(double amount);
+
+    /**
+     * Specifies that incrementSpeed (amount) only can be a double in the range of 0 to 1.
+     * 
+     * @param amount - takes this as argument.
+     */
+    public void gas(double amount){
+        if(amount < 0 || amount > 1)
+            throw new IllegalArgumentException();
+        incrementSpeed(amount);
+        if(getCurrentSpeed() > getEnginePower())
+            setCurrentSpeed(getEnginePower());
+    }
+
+    /**
+     * Same but for decrementspeed.
+     * 
+     * @param amount - takes this as argument
+     */
+    public void brake(double amount){
+        if(amount < 0 || amount > 1)
+            throw new IllegalArgumentException();
+        decrementSpeed(amount);
+        if(getCurrentSpeed() < 0)
+            setCurrentSpeed(0);
     }
 
     /**
@@ -105,16 +170,16 @@ public class Car implements Movable {
     public void move() {
         switch(dir) {
             case NORTH:
-                y += getCurrentSpeed();
+                pos.y += getCurrentSpeed();
                 break;
             case EAST:
-                x += getCurrentSpeed();
+                pos.x += getCurrentSpeed();
                 break;
             case SOUTH:
-                y -= getCurrentSpeed();
+                pos.y -= getCurrentSpeed();
                 break;
             case WEST:
-                x -= getCurrentSpeed();
+                pos.x -= getCurrentSpeed();
                 break;
         }
     }
@@ -159,59 +224,10 @@ public class Car implements Movable {
         }
     }
 
-    /**
-     * Improved incrementspeed that adds speed based on amount
-     * 
-     * @param amount - relies on this argument
-     */
-    protected void incrementSpeed(double amount) {
-        double temp = getCurrentSpeed() + amount;
-        if(temp > enginePower)
-            currentSpeed = enginePower;
-        else if(temp < 0)
-            currentSpeed = 0;
-        else
-            currentSpeed = temp;
+    public void turnAround() {
+        turnRight();
+        turnRight();
     }
-
-    /**
-     * Decreases speed of the car.
-     * 
-     * @param amount - The amount being decreased.
-     */
-    protected void decrementSpeed(double amount) {
-        double temp = getCurrentSpeed() - amount;
-        if(temp > enginePower )
-            currentSpeed = enginePower;
-        else if(temp < 0)
-            currentSpeed = 0;
-        else
-            currentSpeed = temp;
-    }
-
-    /**
-     * Specifies that incrementSpeed (amount) only can be a double in the range of 0 to 1.
-     * 
-     * @param amount - takes this as argument.
-     */
-    public void gas(double amount){
-        if(amount < 0 || amount > 1) {
-            throw new IllegalArgumentException();
-        }
-        incrementSpeed(amount);
-    }
-
-    /**
-     * Same but for decrementspeed.
-     * 
-     * @param amount - takes this as argument
-     */
-    public void brake(double amount){
-            decrementSpeed(amount);
-            if(amount < 0 || amount > 1) {
-                throw new IllegalArgumentException();
-            }
-        }
 
     /**
      * Checks if two cars are an appropriate distance from each other.
@@ -221,13 +237,12 @@ public class Car implements Movable {
      * @return - True if the difference in x or y is greater than 0 and
      * less then or equal to 3. False otherwise.
      */
-    public boolean checkDistance(Car car1, Car car2) {
-        if(car1.x == car2.x && car1.y == car2.y) {
+    public boolean checkDistance(Car car) {
+        if(pos.x == car.pos.x && pos.y == car.pos.y) {
             return false;
-        } else if (Math.abs(car1.x - car2.x) > 3 || Math.abs(car1.y - car2.y) > 3) {
+        } else if (Math.abs(pos.x - car.pos.x) > 3 || Math.abs(pos.y - car.pos.y) > 3) {
             return false;
         }
-        
         return true;
     }
 
@@ -235,7 +250,7 @@ public class Car implements Movable {
      * Testfunction for printing the coordinates of a car.
      */
     void printCoords() {
-        System.out.println("(" + x + "," + y + ")");
+        System.out.println("(" + pos.x + ";" + pos.y + ")");
     }
 }
 
