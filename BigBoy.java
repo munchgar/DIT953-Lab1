@@ -120,11 +120,11 @@ public class BigBoy extends Car implements Loadable<Car> {
     }
 
     protected void incrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() + amount);
+        setCurrentSpeed(Math.min(getCurrentSpeed() + amount, getEnginePower()));
     }
 
     protected void decrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() - amount);
+        setCurrentSpeed(Math.max(getCurrentSpeed() - amount, 0));
     }
 }
 
