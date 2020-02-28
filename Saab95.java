@@ -1,25 +1,31 @@
 import java.awt.*;
 
 /**
- * Represents a car called Saab95 from superclass "cars"
+ * Basic class for a Saab95, extends Car.
+ * 
+ * @author Jonathan Héden,
+ * @author Nicklas Strandevall,
+ * @author Kevin Rylander
  */
-public class Saab95 extends Car{
-    /**
-     * Determines whether the turbo is on or off
-     */
-    public boolean turboOn;
+public class Saab95 extends Car {
+    
+    private boolean turboOn;
 
     /**
-     * Method that gives the Saab95 two doors, the color red and enginepower 125
-     *
+     * Constructor that gives the Saab95 2 doors, the color red and enginepower 125.
      */
     public Saab95(){
-        nrDoors = 2;
-        color = Color.red;
-        enginePower = 125;
+        super(  2, //nrDoors
+                "Saab95" //modelName
+        );
+        setColor(Color.RED);
+        setEnginePower(125);
 	    turboOn = false;
-        modelName = "Saab95";
         stopEngine();
+    }
+
+    public boolean getTurbo() {
+        return turboOn;
     }
 
     /**
@@ -38,30 +44,28 @@ public class Saab95 extends Car{
 
     /**
      * Method that determines the speedfactor based on the enginepower and turbo
+     * 
      * @return - Returns the speedfactor
      */
     private double speedFactor(){
         double turbo = 1;
         if(turboOn) turbo = 1.3;
-        return enginePower * 0.01 * turbo;
+        return getEnginePower() * 0.01 * turbo;
     }
 
     /**
      * Gets overridden by method in superclass car. Improved incrementspeed that adds speed based on amount
      * @param amount
      */
-    private void incrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() + speedFactor() * amount;
+    protected void incrementSpeed(double amount){
+        setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
     }
 
     /**
      * Gets overridden by superclass car. Decreases speed by x amount
      * @param amount
      */
-    private void decrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() - speedFactor() * amount;
+    protected void decrementSpeed(double amount){
+        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
     }
-    
-    // TODO fix this method according to lab pm
-
 }

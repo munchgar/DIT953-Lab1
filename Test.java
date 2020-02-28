@@ -5,16 +5,12 @@ public class Test {
     }
     
     public static void main(String[] args) {
-        Saab95 brum = new Saab95();
-        brum.printCoords();
+        Scania scan = new Scania();
 
-        //brum.gas(1);
-        brum.gas(1);
-        brum.move();
-        brum.printCoords();
-
-        brum.turnRight();
-        brum.move();
-        brum.printCoords();
+        scan.tip(50);
+        sout(scan.getDegree());
+        scan.gas(1);
+        scan.move();
+        scan.printCoords();
     }
 }
