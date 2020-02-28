@@ -47,6 +47,6 @@ public class Volvo240 extends Car{
      * @param amount
      */
     protected void decrementSpeed(double amount){
-        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor()*amount,0));
+        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor()*amount, 0));
     }
 }
