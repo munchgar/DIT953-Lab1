@@ -103,8 +103,9 @@ public class CarController {
     // Calls the tip method for each Scania once
     void tip() {
         for (Car car : cars) {
-            if(car instanceof Scania) {
-                ((Scania) car).tip(Scania.MAX_TILT);
+            if(car instanceof Scania && car.getCurrentSpeed() == 0) {
+                ((Scania) car).tip(70);
+                System.out.println("Tip");
             }
         }
     }
@@ -112,8 +113,9 @@ public class CarController {
     // Calls the sink method for each Scania once
     void sink() {
         for (Car car : cars) {
-            if(car instanceof Scania) {
-                ((Scania) car).tip(Scania.MIN_TILT);
+            if(car instanceof Scania && car.getCurrentSpeed() == 0) {
+                ((Scania) car).sink(70);
+                System.out.println("Sink");
             }
         }
     }
