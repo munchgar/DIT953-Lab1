@@ -49,7 +49,7 @@ public class Saab95 extends Car {
      */
     private double speedFactor(){
         double turbo = 1;
-        if(turboOn) turbo = 11.3;
+        if(turboOn) turbo = 1.3;
         return getEnginePower() * 0.01 * turbo;
     }
 
@@ -58,7 +58,7 @@ public class Saab95 extends Car {
      * @param amount
      */
     protected void incrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() + speedFactor() * amount);
+        setCurrentSpeed(Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower()));
     }
 
     /**
@@ -66,6 +66,6 @@ public class Saab95 extends Car {
      * @param amount
      */
     protected void decrementSpeed(double amount){
-        setCurrentSpeed(getCurrentSpeed() - speedFactor() * amount);
+        setCurrentSpeed(Math.max(getCurrentSpeed() - speedFactor() * amount, 0));
     }
 }
