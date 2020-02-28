@@ -146,8 +146,6 @@ abstract public class Car implements Movable {
         if(amount < 0 || amount > 1)
             throw new IllegalArgumentException();
         incrementSpeed(amount);
-        if(getCurrentSpeed() > getEnginePower())
-            setCurrentSpeed(getEnginePower());
     }
 
     /**
@@ -159,8 +157,6 @@ abstract public class Car implements Movable {
         if(amount < 0 || amount > 1)
             throw new IllegalArgumentException();
         decrementSpeed(amount);
-        if(getCurrentSpeed() < 0)
-            setCurrentSpeed(0);
     }
 
     /**
