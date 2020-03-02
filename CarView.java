@@ -19,16 +19,17 @@ public class CarView extends JFrame {
     public static final int X = 1015;
     public static final int Y = 600;
 
-    CarModel model;
-
     // The draw panel for the cars
-    DrawPanel drawPanel;
+    private DrawPanel drawPanel;
 
     // Constructor
-    public CarView(String framename, CarModel model){
-        this.model = model;
-        drawPanel  = new DrawPanel(X, Y, model);
+    public CarView(String framename){
+        drawPanel  = new DrawPanel(X, Y);
         initComponents(framename);
+    }
+
+    public DrawPanel getDrawPanel() {
+        return drawPanel;
     }
 
     // Sets everything in place and fits everything
