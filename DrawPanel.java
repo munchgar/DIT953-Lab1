@@ -13,13 +13,10 @@ public class DrawPanel extends JPanel implements PositionObserver {
     // Just a single image, TODO: Generalize
     BufferedImage volvoImage, saabImage, scaniaImage;
 
-    CarModel model;
+    ArrayList<Car> cars;
 
     // Initializes the panel and reads the images
-    public DrawPanel(int x, int y, CarModel model) {
-        this.model = model;
-        model.subscribe(this);
-
+    public DrawPanel(int x, int y) {
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.green);
@@ -41,7 +38,9 @@ public class DrawPanel extends JPanel implements PositionObserver {
 
     }
 
+    @Override
     public void updatePosition(ArrayList<Car> cars) {
+        this.cars = cars;
         repaint();
     }
 
@@ -68,7 +67,6 @@ public class DrawPanel extends JPanel implements PositionObserver {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        ArrayList<Car> cars = model.cars;
         BufferedImage tempImage;
         int x, y;
 
