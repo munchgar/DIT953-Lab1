@@ -1,134 +1,200 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
-/*
-* This class represents the Controller part in the MVC pattern.
-* It's responsibilities is to listen to the View and responds in a appropriate manner by
-* modifying the model state and the updating the view.
-*/
+/**
+ * This class represents the full view of the MVC pattern of your car simulator.
+ * It initializes with being center on the screen and attaching it's controller in it's state.
+ * It communicates with the Controller by calling methods of it when an action fires of in
+ * each of it's components.
+ * TODO: Write more actionListeners and wire the rest of the buttons
+ **/
 
-public class CarController {
-    // member fields:
+public class CarController extends JFrame {
+    private static final int X = 1000;
+    private static final int Y = 250;
 
-    // The delay (ms) corresponds to 20 updates a sec (hz)
-    private final int delay = 50;
-    // The timer is started with an listener (see below) that executes the statements
-    // each step between delays.
-    private Timer timer = new Timer(delay, new TimerListener());
+    CarModel model;
 
-    // The frame that represents this instance View of the MVC pattern
-    CarView frame;
-    // A list of cars, modify if needed
-    ArrayList<Car> cars = new ArrayList<>();
+    //Swing components
+    JPanel controlPanel = new JPanel();
 
-    //methods:
+    JPanel gasPanel = new JPanel();
+    JSpinner gasSpinner = new JSpinner();
+    int gasAmount = 0;
+    JLabel gasLabel = new JLabel("Amount of gas");
 
-    public static void main(String[] args) {
-        // Instance of this class
-        CarController cc = new CarController();
+    JButton gasButton = new JButton("Gas");
+    JButton brakeButton = new JButton("Brake");
+    JButton turboOnButton = new JButton("Saab Turbo on");
+    JButton turboOffButton = new JButton("Saab Turbo off");
+    JButton liftBedButton = new JButton("Scania Lift Bed");
+    JButton lowerBedButton = new JButton("Lower Lift Bed");
 
-        cc.cars.add(new Volvo240());
-        cc.cars.add(new Saab95());
-        cc.cars.add(new Scania());
+    JButton startButton = new JButton("Start all cars");
+    JButton stopButton = new JButton("Stop all cars");
 
-        cc.cars.get(1).setX(100);
-        cc.cars.get(2).setX(200);
+    JButton addButton = new JButton("Add car");
+    JButton removeButton = new JButton("Remove car");
 
-        // Start a new view and send a reference of self
-        cc.frame = new CarView("CarSim 1.0", cc);
+    // Constructor
+    public CarController(CarModel model){
+        this.model = model;
 
-        // Start the timer
-        cc.timer.start();
+        initComponents();
     }
 
-    /* Each step the TimerListener moves all the cars in the list and tells the
-    * view to update its images. Change this method to your needs.
-    * */
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            for (Car car : cars) {
-                car.move();
-                int x = (int) Math.round(car.getX());
-                int y = (int) Math.round(car.getY());
+    // Sets everything in place and fits everything
+    // TODO: Take a good look and make sure you understand how these methods and components work
+    private void initComponents() {
 
-                if(y < 0 || y > 500) {
-                    car.turnAround();
-                } else if(x < 0 || x > 700) {
-                    car.turnAround();
+        this.setTitle("CarController");
+        this.setPreferredSize(new Dimension(X,Y));
+        this.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+
+        SpinnerModel spinnerModel =
+                new SpinnerNumberModel(0, //initial value
+                        0, //min
+                        100, //max
+                        1);//step
+        gasSpinner = new JSpinner(spinnerModel);
+        gasSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                gasAmount = (int) ((JSpinner)e.getSource()).getValue();
+            }
+        });
+
+        gasPanel.setLayout(new BorderLayout());
+        gasPanel.add(gasLabel, BorderLayout.PAGE_START);
+        gasPanel.add(gasSpinner, BorderLayout.PAGE_END);
+
+        this.add(gasPanel);
+
+        controlPanel.setLayout(new GridLayout(2,4));
+
+        controlPanel.add(gasButton, 0);
+        controlPanel.add(turboOnButton, 1);
+        controlPanel.add(liftBedButton, 2);
+        controlPanel.add(addButton, 3);
+        controlPanel.add(brakeButton, 4);
+        controlPanel.add(turboOffButton, 5);
+        controlPanel.add(lowerBedButton, 6);
+        controlPanel.add(removeButton, 7);
+        controlPanel.setPreferredSize(new Dimension((X/2)+4, 200));
+        this.add(controlPanel);
+        controlPanel.setBackground(Color.CYAN);
+
+
+        startButton.setBackground(Color.blue);
+        startButton.setForeground(Color.green);
+        startButton.setPreferredSize(new Dimension(X/5-15,200));
+        this.add(startButton);
+
+
+        stopButton.setBackground(Color.red);
+        stopButton.setForeground(Color.black);
+        stopButton.setPreferredSize(new Dimension(X/5-15,200));
+        this.add(stopButton);
+
+        // This actionListener is for the gas button only
+        // TODO: Create more for each component as necessary
+        gasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.gas(gasAmount);
+            }
+        });
+
+        brakeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.brake(gasAmount);
+            }
+        });
+
+        turboOnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setTurboOn();
+            }
+        });
+
+        turboOffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.setTurboOff();
+            }
+        });
+
+        liftBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.tip();
+            }
+        });
+
+        lowerBedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.sink();
+            }
+        });
+
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.startAll();
+            }
+        });
+        
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.stopAll();
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Random r = new Random();
+                int random = r.nextInt((3 - 1) + 1) + 1;
+
+                Car car;
+                switch(random) {
+                    case 1: car = new Volvo240(); break;
+                    case 2: car = new Saab95(); break;
+                    case 3: car = new Scania(); break;
+                    default:
+                            car = new BigBoy();
                 }
-
-                frame.drawPanel.moveit(x, y, car);
-                // repaint() calls the paintComponent method of the panel
-                frame.drawPanel.repaint();
+        
+                model.addCar(car);
             }
-        }
-    }
+        });
 
-    // Calls the gas method for each car once
-    void gas(int amount) {
-        double gas = ((double) amount) / 100;
-        for (Car car : cars) {
-            car.gas(gas);
-        }
-    }
-
-    // Calls the brake method for each car once
-    void brake(int amount) {
-        double brake = ((double) amount) / 100;
-        for (Car car : cars) {
-            car.brake(brake);
-        }
-    }
-
-    // Calls the setTurboOn method for each Saab95 once
-    void setTurboOn() {
-        for (Car car : cars) {
-            if(car instanceof Saab95) {
-                ((Saab95) car).setTurboOn();
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.removeCar(new Scania());
             }
-        }
-    }
+        });
 
-    // Calls the setTurboOff method for each Saab95 once
-    void setTurboOff() {
-        for (Car car : cars) {
-            if(car instanceof Saab95) {
-                ((Saab95) car).setTurboOff();
-            }
-        }
-    }
+        // Make the frame pack all it's components by respecting the sizes if possible.
+        this.pack();
 
-    // Calls the tip method for each Scania once
-    void tip() {
-        for (Car car : cars) {
-            if(car instanceof Scania && car.getCurrentSpeed() == 0) {
-                ((Scania) car).tip(70);
-                System.out.println("Tip");
-            }
-        }
-    }
-
-    // Calls the sink method for each Scania once
-    void sink() {
-        for (Car car : cars) {
-            if(car instanceof Scania && car.getCurrentSpeed() == 0) {
-                ((Scania) car).sink(70);
-                System.out.println("Sink");
-            }
-        }
-    }
-
-    void startAll() {
-        for (Car car : cars) {
-            car.startEngine();
-        }
-    }
-
-    void stopAll() {
-        for (Car car : cars) {
-            car.stopEngine();
-        }
+        // Get the computer screen resolution
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        // Center the frame
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        // Make the frame visible
+        this.setVisible(true);
+        // Make sure the frame exits when "x" is pressed
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
