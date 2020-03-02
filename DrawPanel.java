@@ -4,35 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.ArrayList;
 
 // This panel represent the animated part of the view with the car images.
 
-public class DrawPanel extends JPanel{
+public class DrawPanel extends JPanel implements PositionObserver {
 
     // Just a single image, TODO: Generalize
     BufferedImage volvoImage, saabImage, scaniaImage;
 
-    // To keep track of a singel cars position
-    Point volvoPoint = new Point();
-    Point saabPoint = new Point();
-    Point scaniaPoint = new Point();
-
-    // TODO: Make this genereal for all cars
-    void moveit(int x, int y, Car car){
-        if(car instanceof Volvo240) {
-            volvoPoint.x = x;
-            volvoPoint.y = y;
-        } else if(car instanceof Saab95) {
-            saabPoint.x = x;
-            saabPoint.y = y;
-        } else if(car instanceof Scania) {
-            scaniaPoint.x = x;
-            scaniaPoint.y = y;
-        }
-    }
+    CarModel model;
 
     // Initializes the panel and reads the images
-    public DrawPanel(int x, int y) {
+    public DrawPanel(int x, int y, CarModel model) {
+        this.model = model;
+        model.subscribe(this);
+
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(x, y));
         this.setBackground(Color.green);
@@ -54,13 +41,46 @@ public class DrawPanel extends JPanel{
 
     }
 
+    public void updatePosition(ArrayList<Car> cars) {
+        repaint();
+    }
+
+    private void checkWallCollision(int x, int y, Car car) {
+        if(y < 0 || y > 500) {
+            car.turnAround();
+        } else if(x < 0 || x > 1015) {
+            car.turnAround();
+        }
+    }
+
+    private BufferedImage carToImage(Car car) {
+        if(car instanceof Volvo240)
+            return volvoImage;
+        else if(car instanceof Saab95)
+            return saabImage;
+        else
+            return scaniaImage;
+    }
+
     // This method is called each time the panel updates/refreshes/repaints itself
     // TODO: Change to suit your needs.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null); // see javadoc for more info on the parameters
-        g.drawImage(saabImage, saabPoint.x, saabPoint.y, null);
-        g.drawImage(scaniaImage, scaniaPoint.x, scaniaPoint.y, null);
+
+        ArrayList<Car> cars = model.cars;
+        BufferedImage tempImage;
+        int x, y;
+
+        for(Car car : cars) {
+            tempImage = carToImage(car);
+
+            x = (int) Math.round(car.getX());
+            y = (int) Math.round(car.getY());
+
+            checkWallCollision(x, y, car);
+
+            g.drawImage(tempImage, x, y, null);
+        }
     }
 }
