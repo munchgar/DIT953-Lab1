@@ -42,7 +42,6 @@ public class CarModel {
     }
 
     public CarModel() {
-        //timer = new Timer(delay, new TimerListener());
         cars = new ArrayList<>();
         observers = new ArrayList<>();
     }
@@ -144,5 +143,11 @@ public class CarModel {
         for (Car car : cars) {
             car.stopEngine();
         }
+    }
+
+    void addRandomCar() {
+        CarFactory factory = new CarFactory();
+        Car car = factory.createRandomCar();
+        addCar(car);
     }
 }
