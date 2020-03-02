@@ -36,19 +36,19 @@ abstract public class Car implements Movable {
     }
 
     public double getX() {
-        return pos.x;
+        return pos.getX();
     }
 
     protected void setX(double x) {
-        pos.x = x;
+        pos.setX(x);
     }
 
     public double getY() {
-        return pos.y;
+        return pos.getY();
     }
 
     protected void setY(double y) {
-        pos.y = y;
+        pos.setY(y);
     }
 
     /**
@@ -166,16 +166,16 @@ abstract public class Car implements Movable {
     public void move() {
         switch(dir) {
             case NORTH:
-                pos.y += getCurrentSpeed();
+                pos.setY(pos.getY() + getCurrentSpeed());
                 break;
             case EAST:
-                pos.x += getCurrentSpeed();
+                pos.setX(pos.getX() + getCurrentSpeed());
                 break;
             case SOUTH:
-                pos.y -= getCurrentSpeed();
+                pos.setY(pos.getY() - getCurrentSpeed());
                 break;
             case WEST:
-                pos.x -= getCurrentSpeed();
+                pos.setX(pos.getX() - getCurrentSpeed());
                 break;
         }
     }
@@ -234,9 +234,9 @@ abstract public class Car implements Movable {
      * less then or equal to 3. False otherwise.
      */
     public boolean checkDistance(Car car) {
-        if(pos.x == car.pos.x && pos.y == car.pos.y) {
+        if(pos.getX() == car.pos.getX() && pos.getY() == car.pos.getY()) {
             return false;
-        } else if (Math.abs(pos.x - car.pos.x) > 3 || Math.abs(pos.y - car.pos.y) > 3) {
+        } else if (Math.abs(pos.getX() - car.pos.getX()) > 3 || Math.abs(pos.getY() - car.pos.getY()) > 3) {
             return false;
         }
         return true;
@@ -246,7 +246,7 @@ abstract public class Car implements Movable {
      * Testfunction for printing the coordinates of a car.
      */
     void printCoords() {
-        System.out.println("(" + pos.x + ";" + pos.y + ")");
+        System.out.println("(" + pos.getX() + ";" + pos.getY() + ")");
     }
 }
 
