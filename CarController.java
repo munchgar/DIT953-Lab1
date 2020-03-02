@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * This class represents the full view of the MVC pattern of your car simulator.
@@ -162,19 +161,7 @@ public class CarController extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Random r = new Random();
-                int random = r.nextInt((3 - 1) + 1) + 1;
-
-                Car car;
-                switch(random) {
-                    case 1: car = new Volvo240(); break;
-                    case 2: car = new Saab95(); break;
-                    case 3: car = new Scania(); break;
-                    default:
-                            car = new BigBoy();
-                }
-        
-                model.addCar(car);
+                model.addRandomCar();
             }
         });
 
